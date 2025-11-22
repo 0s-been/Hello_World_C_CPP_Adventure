@@ -224,7 +224,6 @@ MonoBehaviour:
   m_layer:
     serializedVersion: 2
     m_Bits: 64
-  m_dashcool: 0
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1001,15 +1000,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCamera
   m_Target: {fileID: 404102773}
   m_Followspeed: 10
-  m_Msesensitivity: 100
+  m_Msensitivity: 100
   m_ClampAngle: 70
+  m_MoveSmooth: 10
   m_RealCamera: {fileID: 330585546}
-  m_Nomaldir: {x: 0, y: 0, z: 0}
+  m_Normaldir: {x: 0, y: 0, z: 0}
   m_Finaldir: {x: 0, y: 0, z: 0}
   m_minDistance: 1
   m_maxDistance: 10
   m_FinalDistance: 0
-  m_MoveSmooth: 10
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!4 &1331508792
 Transform:
   m_ObjectHideFlags: 0

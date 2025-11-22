@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask m_layer;
     //---대쉬에 관한 변수들---
     private bool m_isDash = false;
-    public float m_dashcool = 0f;
+    private float m_dashcool = 0f;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -77,11 +77,15 @@ public class PlayerController : MonoBehaviour
 
             //두 점 사이를 t에 따라 보간해주는 함수
             //회전 전의 방향 forward와 새로운 입력을 통한 방향 m_dir을 기준으로 수행 회전속도는 세 번째 매개변수로 제어
-            transform.forward = Vector3.Lerp(transform.forward, m_dir, Time.deltaTime * m_RotSpeed);
+            //[버그] 버그4 - 플레이어 이동 시 플레이어 오브젝트만 미세하게 떨림
+            //원인 -> jittering이라고 하는 unity의 흔한 버그로 여기선 FixedUpdate에서 Time.deltaTime 타임 사용으로 인한 문제
+            //FixedUpdate는 고정적인데 Time.deltaTime은 가변적이라서 발생했음
+            //해결 -> playercamer와 playercontroller에서 fixedupdate에서 사용하는 deltatime들을 전부 Time.fixedDeltaTime사용으로 해결
+            transform.forward = Vector3.Lerp(transform.forward, m_dir, Time.fixedDeltaTime * m_RotSpeed);
         }
 
         //내 위치에서 나아갈 방향 벡터와 이동 속도, 로컬기기의 프레임을 곱한 값을 더해서 이동 처리
-        m_rigidbody.MovePosition(this.gameObject.transform.position + m_dir * m_MoveSpeed * Time.deltaTime);
+        m_rigidbody.MovePosition(this.gameObject.transform.position + m_dir * m_MoveSpeed * Time.fixedDeltaTime);
 
         //y의 선형속도 값이 0보다 작다면 정점을 찍고 내려오는 상황
         if(m_rigidbody.linearVelocity.y < 0)
