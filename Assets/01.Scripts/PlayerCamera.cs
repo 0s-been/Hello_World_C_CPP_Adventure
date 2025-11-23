@@ -51,7 +51,7 @@ public class PlayerCamera : MonoBehaviour
         m_rotX -= Input.GetAxis("Mouse Y") * m_Msensitivity * Time.deltaTime;
         //마우스를 좌우로 움직일 때 카메라는 y축 기준 회전
         m_rotY += Input.GetAxis("Mouse X") * m_Msensitivity * Time.deltaTime;
-
+    
         //회전 각도의 최소값과 최대값을 제한(clamp). 범위 밖의 값을 최소값과 최대값으로 제한. 
         m_rotX = Mathf.Clamp(m_rotX, -m_ClampAngle, m_ClampAngle);
 
