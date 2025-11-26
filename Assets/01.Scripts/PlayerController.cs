@@ -5,29 +5,32 @@ using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Movement")]
+    //기본 이동 관련
     private float m_MoveSpeed = 10f;
     private float m_RotSpeed = 30f;
     private float m_JumpHeight = 10f;
 
-    [Header("Dash")]
+    //대쉬 관련
     public float m_DashDistance = 10f;
     private float m_dashcool = 0f;
     private float m_dashduration = 0.15f;
     private float m_dashcoolTimer;
 
-    [Header("State")]
+    //상태 관련
     private bool m_IsMove = false;
     private bool m_isDash = false;
     //땅을 밟고 있는 지 판별할 변수
     private bool m_IsGrounded = false;
 
-    [Header("Component")]
+    //컴포넌트 관련
     private Transform m_CameraTrans;
     //접촉한 오브젝트의 레이어를 판별할 레이어마스크
     public LayerMask m_layer;
     private Rigidbody m_rigidbody;
-    private Animator m_Animator;
+    //애니메이션 컨트롤러
+    private PlayerAniController m_AnimController;
+
+
 
     //어떠한 기능을 수행할 때 방향을 정할 변수
     private Vector3 m_dir = Vector3.zero;
@@ -36,7 +39,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         m_rigidbody = this.GetComponent<Rigidbody>();
-        m_Animator = this.GetComponent <Animator>();
+        m_AnimController = GetComponent<PlayerAniController>();
 
         //카메라가 할당되지 않았을 경우 자동으로 할당
         if(m_CameraTrans == null)
@@ -52,7 +55,7 @@ public class PlayerController : MonoBehaviour
    ///////////////////개선코드///////////////////////////////////////251123ver
    //아직 애니메이션 부분은 못함
   
-   
+
     void Update()
     {
         //입력 처리
@@ -75,6 +78,7 @@ public class PlayerController : MonoBehaviour
         }
         
         //애니메이터 업데이트 부분 구현
+        UpdateAnimation();
     }
 
     void FixedUpdate()
@@ -85,6 +89,18 @@ public class PlayerController : MonoBehaviour
             MovementHandle();
             JumpGravity();
         }
+    }
+
+    private void UpdateAnimation()
+    {
+        if (m_AnimController == null) return;
+        //이동 애니메이션
+        m_AnimController.SetMovement(m_IsMove, m_dir.magnitude);
+        //지면 상태 애니메이션
+        m_AnimController.SetGrounded(m_IsGrounded);
+        //수직 속도 애니메이션
+        m_AnimController.SetVerticalVelocity(m_rigidbody.linearVelocity.y);
+
     }
     //입력값으로 카메라 기준 이동 방향을 계산하는 함수
     private void InputHandle()
@@ -155,9 +171,11 @@ public class PlayerController : MonoBehaviour
         Vector3 jumpforce = Vector3.up * m_JumpHeight;
         //그 이동벡터로 힘을 가함
         m_rigidbody.AddForce(jumpforce, ForceMode.VelocityChange);
-        if(m_Animator != null)
+
+        //애니메이션 트리거 호출
+        if(m_AnimController != null)
         {
-            m_Animator.SetTrigger("Jump");
+            m_AnimController.TriggerJump();
         }
     }
 
@@ -182,9 +200,11 @@ public class PlayerController : MonoBehaviour
         m_isDash = true;
         m_dashcoolTimer = m_dashcool;
 
-        if (m_Animator != null)
+        //애니메이션 트리거 호출
+        if (m_AnimController != null)
         {
-            m_Animator.SetTrigger("Dash");
+            m_AnimController.TriggerDash();
+            m_AnimController.SetDashing(true);
         }
 
         //대쉬 전 점프 시 y의 속도는 놔두고 수평속도만 초기화
@@ -231,6 +251,11 @@ public class PlayerController : MonoBehaviour
         //원래 저항값으로 복원
         m_rigidbody.linearDamping = originalDamping;
         m_isDash = false;
+
+        if(m_AnimController != null)
+        {
+            m_AnimController.SetDashing(false);
+        }
     }
 
 
