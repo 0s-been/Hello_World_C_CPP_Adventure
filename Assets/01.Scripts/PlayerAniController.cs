@@ -7,19 +7,20 @@ public class PlayerAniController : MonoBehaviour
     private int m_HashSpeed = Animator.StringToHash("Speed");
     private int m_HashIsMoving = Animator.StringToHash("IsMoving");
     private int m_HashIsGrounded = Animator.StringToHash("IsGrounded");
+    private int m_HashIsAttack = Animator.StringToHash("IsAttack");
     private int m_HashJump = Animator.StringToHash("Jump");
     private int m_HashDash = Animator.StringToHash("Dash");
     private int m_HashIsDashing = Animator.StringToHash("IsDashing");
     private int m_HashVerticalVelocity = Animator.StringToHash("VerticalVelocity");
 
-    //start Àü¿¡ ½ÇÇàµÇ´Â ÇÔ¼ö
+    //start ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½
     void Awake()
     {
         m_Animator = GetComponent<Animator>();
     }
 
-    //ÀÌµ¿ »óÅÂ ¾÷µ¥ÀÌÆ® PlayerControllerÀÇ MovementHandle¿¡¼­ È£Ãâ
-    //isMoving -> ÀÌµ¿ ÁßÀÎÁö ¿©ºÎ, speed -> ÀÌµ¿¼Óµµ
+    //ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® PlayerControllerï¿½ï¿½ MovementHandleï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½
+    //isMoving -> ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, speed -> ï¿½Ìµï¿½ï¿½Óµï¿½
     public void SetMovement(bool isMoving, float speed)
     {
         speed = 1f;
@@ -29,7 +30,14 @@ public class PlayerAniController : MonoBehaviour
         m_Animator.SetFloat(m_HashSpeed, speed);
     }
 
-    //Áö¸é »óÅÂ ¾÷µ¥ÀÌÆ® PlayerControllerÀÇ CheckGrounded¿¡¼­ È£Ãâ
+    public void TriggerAttack()
+    {
+        if(m_Animator == null) return;
+
+        m_Animator.SetTrigger(m_HashIsAttack);
+    }
+
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® PlayerControllerï¿½ï¿½ CheckGroundedï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½
     public void SetGrounded(bool isGrounded)
     {
         if (m_Animator == null) return;
@@ -37,7 +45,7 @@ public class PlayerAniController : MonoBehaviour
         m_Animator.SetBool(m_HashIsGrounded, isGrounded);
     }
 
-    //Á¡ÇÁ Æ®¸®°Å PlayerControllerÀÇ Jump¿¡¼­ È£Ãâ
+    //ï¿½ï¿½ï¿½ï¿½ Æ®ï¿½ï¿½ï¿½ï¿½ PlayerControllerï¿½ï¿½ Jumpï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½
     public void TriggerJump()
     {
         if (m_Animator == null) return;
@@ -45,7 +53,7 @@ public class PlayerAniController : MonoBehaviour
         m_Animator.SetTrigger(m_HashJump);
     }
 
-    //´ë½¬ Æ®¸®°Å PlayerControllerÀÇ Dash ÄÚ·çÆ¾¿¡¼­ È£Ãâ
+    //ï¿½ë½¬ Æ®ï¿½ï¿½ï¿½ï¿½ PlayerControllerï¿½ï¿½ Dash ï¿½Ú·ï¿½Æ¾ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½
     public void TriggerDash()
     {
         if (m_Animator == null) return;
@@ -53,14 +61,14 @@ public class PlayerAniController : MonoBehaviour
         m_Animator.SetTrigger(m_HashDash);
     }
 
-    //´ë½¬ »óÅÂ ¾÷µ¥ÀÌÆ®
+    //ï¿½ë½¬ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public void SetDashing(bool isDashing)
     {
         if (m_Animator == null) return;
 
         m_Animator.SetBool(m_HashIsDashing, isDashing);
     }
-    //Á¡ÇÁ ½Ã »ó½Â,ÇÏ°­ ¼Óµµ°¡ ´Ù¸£´Ï ±×¿¡ µû¸¥ ¼öÁ÷ ¼Óµµ ¾÷µ¥ÀÌÆ®
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½,ï¿½Ï°ï¿½ ï¿½Óµï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½×¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public void SetVerticalVelocity(float vel)
     {
         if (m_Animator == null) return;
