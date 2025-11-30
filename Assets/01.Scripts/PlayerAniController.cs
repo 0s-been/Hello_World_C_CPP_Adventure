@@ -7,20 +7,20 @@ public class PlayerAniController : MonoBehaviour
     private int m_HashSpeed = Animator.StringToHash("Speed");
     private int m_HashIsMoving = Animator.StringToHash("IsMoving");
     private int m_HashIsGrounded = Animator.StringToHash("IsGrounded");
-    private int m_HashIsAttack = Animator.StringToHash("IsAttack");
+
     private int m_HashJump = Animator.StringToHash("Jump");
     private int m_HashDash = Animator.StringToHash("Dash");
     private int m_HashIsDashing = Animator.StringToHash("IsDashing");
     private int m_HashVerticalVelocity = Animator.StringToHash("VerticalVelocity");
 
-    //start ���� ����Ǵ� �Լ�
+    //start 전에 실행되는 함수
     void Awake()
     {
         m_Animator = GetComponent<Animator>();
     }
 
-    //�̵� ���� ������Ʈ PlayerController�� MovementHandle���� ȣ��
-    //isMoving -> �̵� ������ ����, speed -> �̵��ӵ�
+    //이동 상태 업데이트 PlayerController의 MovementHandle에서 호출
+    //isMoving -> 이동 중인지 여부, speed -> 이동속도
     public void SetMovement(bool isMoving, float speed)
     {
         speed = 1f;
@@ -30,14 +30,7 @@ public class PlayerAniController : MonoBehaviour
         m_Animator.SetFloat(m_HashSpeed, speed);
     }
 
-    public void TriggerAttack()
-    {
-        if(m_Animator == null) return;
-
-        m_Animator.SetTrigger(m_HashIsAttack);
-    }
-
-    //���� ���� ������Ʈ PlayerController�� CheckGrounded���� ȣ��
+    //지면 상태 업데이트 PlayerController의 CheckGrounded에서 호출
     public void SetGrounded(bool isGrounded)
     {
         if (m_Animator == null) return;
@@ -45,7 +38,7 @@ public class PlayerAniController : MonoBehaviour
         m_Animator.SetBool(m_HashIsGrounded, isGrounded);
     }
 
-    //���� Ʈ���� PlayerController�� Jump���� ȣ��
+    //점프 트리거 PlayerController의 Jump에서 호출
     public void TriggerJump()
     {
         if (m_Animator == null) return;
@@ -53,7 +46,7 @@ public class PlayerAniController : MonoBehaviour
         m_Animator.SetTrigger(m_HashJump);
     }
 
-    //�뽬 Ʈ���� PlayerController�� Dash �ڷ�ƾ���� ȣ��
+    //대시 트리거 PlayerController의 Dash 코루틴에서 호출
     public void TriggerDash()
     {
         if (m_Animator == null) return;
@@ -61,14 +54,14 @@ public class PlayerAniController : MonoBehaviour
         m_Animator.SetTrigger(m_HashDash);
     }
 
-    //�뽬 ���� ������Ʈ
+    //대시 상태 업데이트
     public void SetDashing(bool isDashing)
     {
         if (m_Animator == null) return;
 
         m_Animator.SetBool(m_HashIsDashing, isDashing);
     }
-    //���� �� ���,�ϰ� �ӵ��� �ٸ��� �׿� ���� ���� �ӵ� ������Ʈ
+    //점프 시 상승,하강 속도가 다르니 그에 따른 수직 속도 업데이트
     public void SetVerticalVelocity(float vel)
     {
         if (m_Animator == null) return;

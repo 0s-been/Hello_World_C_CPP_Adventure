@@ -1,40 +1,38 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+
 
 public class PlayerController : MonoBehaviour
 {
-    //�⺻ �̵� ����
+    //기본 이동 관련
     private float m_MoveSpeed = 10f;
     private float m_RotSpeed = 30f;
     private float m_JumpHeight = 10f;
 
-    //�뽬 ����
+    //대시 관련
     public float m_DashDistance = 10f;
     private float m_dashcool = 0f;
     private float m_dashduration = 0.15f;
     private float m_dashcoolTimer;
 
-    //���� ����
+    //상태 관련
     private bool m_IsMove = false;
     private bool m_isDash = false;
-    //���� ��� �ִ� �� �Ǻ��� ����
+    //땅을 밟고 있는 지 판별할 변수
     private bool m_IsGrounded = false;
 
-    //������Ʈ ����
+    //컴포넌트 관련
     private Transform m_CameraTrans;
-    //������ ������Ʈ�� ���̾ �Ǻ��� ���̾��ũ
+    //접촉한 오브젝트의 레이어를 판별할 레이어마스크
     public LayerMask m_layer;
     private Rigidbody m_rigidbody;
-    //�ִϸ��̼� ��Ʈ�ѷ�
+    //애니메이션 컨트롤러
     public PlayerAniController m_AnimController;
-
+    //콤보 공격 컴포넌트
     public PlayerComboAtk m_ComboCom;
 
-
-
-    //��� ����� ������ �� ������ ���� ����
+    //이동이나 카메라 방향에 대한 기능을 수행할 때 방향을 정할 변수
     private Vector3 m_dir = Vector3.zero;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -44,10 +42,10 @@ public class PlayerController : MonoBehaviour
         m_AnimController = GetComponent<PlayerAniController>();
         m_ComboCom = GetComponent<PlayerComboAtk>();
 
-        //ī�޶� �Ҵ���� �ʾ��� ��� �ڵ����� �Ҵ�
-        if(m_CameraTrans == null)
+        //카메라가 할당되지 않았을 경우 자동으로 할당
+        if (m_CameraTrans == null)
         {
-            //mainī�޶��� �θ� transformã��
+            //main카메라의 부모 transform찾기
             Camera mainCam = Camera.main;
             if(mainCam != null)
             {  m_CameraTrans = mainCam.transform.parent;  }
@@ -55,24 +53,20 @@ public class PlayerController : MonoBehaviour
         
     }
 
-   ///////////////////�����ڵ�///////////////////////////////////////251123ver
-   //���� �ִϸ��̼� �κ��� ����
-  
-
     void Update()
     {
-        //�Է� ó��
+        //입력 처리
         InputHandle();
 
-        //���� üũ
+        //지면 체크
         CheckGrounded();
 
-        //���� - ������ ��� �뽬 ���� �ƴ� �� ��� ����
-        if(Input.GetButtonDown("Jump") && m_IsGrounded && !m_isDash)
+        //점프 - 지면을 밟고 대시 중이 아닐 때 사용 가능
+        if (Input.GetButtonDown("Jump") && m_IsGrounded && !m_isDash)
         { Jump(); }
 
-        //�뽬 ��Ÿ�� Ÿ�̸�
-        if(m_dashcoolTimer > 0)
+        //대시 쿨타임 타이머
+        if (m_dashcoolTimer > 0)
         { m_dashcoolTimer -= Time.deltaTime;}
 
         if(Input.GetButtonDown("Dash") && m_dashcoolTimer <= 0 && !m_isDash )
@@ -80,20 +74,14 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Dash());
         }
 
-        if(Input.GetMouseButton(0))
-        {
-             Debug.Log($"in update 공격 실행 : {m_ComboCom.currCombo}");
-            Attack();
-        }
-        
-        //�ִϸ����� ������Ʈ �κ� ����
+        //애니메이터 업데이트 부분 구현
         UpdateAnimation();
     }
 
     void FixedUpdate()
     {
-        //�뽬 ���� �ƴ� ���� �Ϲ� �̵� ó��
-        if(!m_isDash)
+        //대시 중이 아닐 때만 일반 이동 처리
+        if (!m_isDash)
         {
             MovementHandle();
             JumpGravity();
@@ -103,101 +91,104 @@ public class PlayerController : MonoBehaviour
     private void UpdateAnimation()
     {
         if (m_AnimController == null) return;
-        //�̵� �ִϸ��̼�
+        //이동 애니메이션
         m_AnimController.SetMovement(m_IsMove, m_dir.magnitude);
-        //���� ���� �ִϸ��̼�
+        //지면 상태 애니메이션
         m_AnimController.SetGrounded(m_IsGrounded);
-        //���� �ӵ� �ִϸ��̼�
+        //수직 속도 애니메이션
         m_AnimController.SetVerticalVelocity(m_rigidbody.linearVelocity.y);
 
     }
-    //�Է°����� ī�޶� ���� �̵� ������ ����ϴ� �Լ�
+    //입력값으로 카메라 기준 이동 방향을 계산하는 함수
     private void InputHandle()
     {
-        //��� �߿� �Է� ����
-        //��� �߿� ������ �����ϵ��� �ϰų� Ư������ �߰� ���� ��
+        //대시 중엔 입력 무시
         if (m_isDash) return;
+
+        //공격 중일 때 이동 입력 무시? 고민 중
+        if (m_ComboCom != null && m_ComboCom.IsAttacking) return;
 
         float horz = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
 
-        //ī�޶� ������ ������ǥ �������� �̵�
-        if(m_CameraTrans == null)
+        //카메라가 없으면 월드좌표 기준으로 이동
+        if (m_CameraTrans == null)
         {
             m_dir = new Vector3(horz, 0f, vert);
-            m_dir.Normalize();
-            //!=������ ���۷����� ������ ���Ͱ� �����Ͱ� �ƴ϶�� true�� �̵� ��
-            //�����Ͷ��  false�� �̵� ���� �ƴ�
+            m_dir.Normalize();      
             m_IsMove = m_dir != Vector3.zero;
             return;
         }
 
-        //ī�޶��� forward�� right���͸� ���������� ����̵��� �� ���̹Ƿ� y�� 0
-        //�׸��� ũ�Ⱑ �ƴ� ���⸸ �ʿ��ϹǷ� ����ȭ
+        //카메라의 forward와 right벡터를 가져오지만 평면이동을 할 것이므로 y는 0
+        //그리고 크기가 아닌 방향만 필요하므로 정규화
         Vector3 CameraForward = m_CameraTrans.forward;
         CameraForward.y = 0f;
         CameraForward.Normalize();
         Vector3 CameraRight = m_CameraTrans.right;
         CameraRight.y = 0f;
         CameraRight.Normalize();
-        
-        //ī�޶� �������� �̵� ���� ���
+
+        //카메라 기준으로 이동 방향 계산
         m_dir = (CameraForward * vert + CameraRight * horz).normalized;
         m_IsMove = m_dir != Vector3.zero;
     }
 
-    //�������� ĳ������ �̵��� ȸ���� ó���ϴ� �Լ�->Fixedupdate���� ȣ��
+    //실질적인 캐릭터의 이동과 회전을 처리하는 함수->Fixedupdate에서 호출
     private void MovementHandle()
     {
-        if(m_dir != Vector3.zero)
+        //공격 중일 때 이동 입력 무시? 고민 중
+        if (m_ComboCom != null && m_ComboCom.IsAttacking) return;
+
+        if (m_dir != Vector3.zero)
         {
-            //slerp�� ���� ���������� �������� ������ ������ �����Ͽ� �ε巴�� ȸ��
+            //slerp를 통해 시작지점과 목적지점 사이의 값들을 보간하여 부드럽게 회전
             Quaternion targetRot = Quaternion.LookRotation(m_dir);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot,
                 Time.fixedDeltaTime * m_RotSpeed);
 
-            //������ transform.position�� ���� �����ߴµ� ������ٵ��� MovePosition�� �ϴ� �� 
-            //�� �����ϴٰ� �ؼ� ����
+            //원래는 transform.position을 직접 수정했는데 리지드바디의 MovePosition로 하는 게 
+            //더 안전하다고 해서 수정
             Vector3 targetPos = transform.position + m_dir * m_MoveSpeed * Time.fixedDeltaTime;
             m_rigidbody.MovePosition(targetPos);
         }
     }
 
-    //���� ��� �ִ� �� üũ�� �Լ�
+    //땅을 밟고 있는 지 체크할 함수
     void CheckGrounded()
     {
-        //����ĳ��Ʈ�� �� ���������� �÷��̾��� ��ǥ���� ��¦ ���� ����
+        //레이캐스트를 쏠 시작지점을 플레이어의 좌표보다 살짝 위로 설정
         Vector3 rayStart = transform.position + Vector3.up * 0.2f;
 
-        //Raycast�� ��ȯŸ���� bool�̹Ƿ� if else���� �ʿ������ ����
-        //���۽���, �Ʒ���, 1.0f�Ÿ���ŭ �߻�, ���̾��ũ�� ��
+        //Raycast의 반환타입이 bool이므로 if else문이 필요없도록 개선
+        //시작시점, 아래로, 1.0f거리만큼 발사, 레이어마스크와 비교
         m_IsGrounded = Physics.Raycast(rayStart, Vector3.down, 1.0f, m_layer);
     }
 
     private void Jump()
     {
-        //�� �������� �Ǽ����� ���͸� ���� �̵� ���� ���
+        //위 방향으로 실수배한 벡터를 통해 이동 벡터 계산
         Vector3 jumpforce = Vector3.up * m_JumpHeight;
-        //�� �̵����ͷ� ���� ����
+        //그 이동벡터로 힘을 가함
         m_rigidbody.AddForce(jumpforce, ForceMode.VelocityChange);
 
-        //�ִϸ��̼� Ʈ���� ȣ��
-        if(m_AnimController != null)
+        //애니메이션 트리거 호출
+        if (m_AnimController != null)
         {
             m_AnimController.TriggerJump();
         }
     }
 
-    //���� �� �ϰ� �ӵ��� �ʹ� ������ gravity���� �Ͻ������� �����Ͽ� �� ������ �ϰ��ϵ��� ����
+    //점프 시 하강 속도가 너무 느려서 gravity값을 일시적으로 변경하여 더 빠르게 하강하도록 설정
     private void JumpGravity()
     {
-        //y���� �����ӵ��� 0���� �۴ٸ� ������ ��� �������� ���� -> �ϰ� ����
-        if(m_rigidbody.linearVelocity.y < 0)
+        //y방향 선형속도가 0보다 작다면 정점을 찍고 내려오는 순간 -> 하강 시작
+        if (m_rigidbody.linearVelocity.y < 0)
         {
             m_rigidbody.AddForce(Physics.gravity * 5f, ForceMode.Acceleration);
         }
-        //��� ���� �� �߷��� �� �� ���ϰ� ����
-        else if(m_rigidbody.linearVelocity.y > 0)
+        //상승 중일 땐 중력을 좀 더 약하게 설정
+        else if (m_rigidbody.linearVelocity.y > 0)
         {
             m_rigidbody.AddForce(Physics.gravity * 2f, ForceMode.Acceleration);
         }
@@ -209,30 +200,30 @@ public class PlayerController : MonoBehaviour
         m_isDash = true;
         m_dashcoolTimer = m_dashcool;
 
-        //�ִϸ��̼� Ʈ���� ȣ��
+        //애니메이션 트리거 호출
         if (m_AnimController != null)
         {
             m_AnimController.TriggerDash();
             m_AnimController.SetDashing(true);
         }
 
-        //�뽬 �� ���� �� y�� �ӵ��� ���ΰ� ����ӵ��� �ʱ�ȭ
+        //대시 전 점프 시 y의 속도는 놔두고 수평속도만 초기화
         m_rigidbody.linearVelocity = new Vector3(0, m_rigidbody.linearVelocity.y, 0);
-        //ĳ���� ������ �뽬�� �������� ����
+        //캐릭터 정면을 대시할 방향으로 설정
         Vector3 dashdir = transform.forward;
         float dashspeed = m_DashDistance * 10f;
 
-        //�뽬 �ʹݿ� ��û ������ ���ٰ� ���� ������ �����ϱ� ���ؼ�
-        //�ʱ� �ӵ��� ���� ����. -> y���� �̵��� ������ ����
+        //대시 초반엔 엄청 빠르게 갔다가 순간 감속을 적용하기 위해서
+        //초기 속도를 따로 구함. -> y축의 이동은 기존을 유지
         Vector3 dashVelocity = new Vector3(dashdir.x * dashspeed,
             m_rigidbody.linearVelocity.y, dashdir.z * dashspeed);
         m_rigidbody.linearVelocity = dashVelocity;
 
-        //�뽬 �Ĺݿ� �������� ������ �ϱ� �� ���� �������װ�?�� ����
+        //대시 후반에 순간적인 감속을 하기 전 원래 공기저항값?을 저장
         float originalDamping = m_rigidbody.linearDamping;
         m_rigidbody.linearDamping = 10f;
 
-        //�ڿ������� ������ ���� �뽬 ���� �ð� ���� ������ �ٸ��� �� �� ����� Ÿ�̸�
+        //자연스러운 감속을 위해 대시 지속 시간 동안 저항을 다르게 할 때 사용할 타이머
         float temptime = 0f;
 
         while(temptime < m_dashduration)
@@ -241,23 +232,23 @@ public class PlayerController : MonoBehaviour
 
             float t = temptime / m_dashduration;
 
-            //�뽬 ���� �� 
+            //대시 시작 시 
             Vector3 currDashVel = new Vector3(dashdir.x * dashspeed,
                 m_rigidbody.linearVelocity.y, dashdir.z * dashspeed);
-            //�뽬 ���� ��
+            //대시 종료 시
             Vector3 endDashVel = new Vector3(0f, m_rigidbody.linearVelocity.y, 0f);
 
-            //lerp�� ���� �߰����� �������� �ڿ������� �����ϵ�
-            //t�� ������ ���� �������� ������ ������ �츲
+            //lerp를 통해 중간값들 보간으로 자연스럽게 감속하되
+            //t의 제곱을 통해 순간적인 감속의 느낌을 살림
             m_rigidbody.linearVelocity = Vector3.Lerp(currDashVel, endDashVel, t * t);
             yield return null;
         }
 
-        //�뽬 ���� �� ���� ����Ű �Է����� ���� �̵��� ������ ��ġ�� �ʵ��� �ӵ� ����
+        //대시 종료 후 다음 방향키 입력으로 인한 이동에 영향을 끼치지 않도록 속도 조정
         m_rigidbody.linearVelocity = new Vector3(m_rigidbody.linearVelocity.x * 0.2f,
             m_rigidbody.linearVelocity.y, m_rigidbody.linearVelocity.z * 0.2f);
 
-        //���� ���װ����� ����
+        //원래 저항값으로 복원
         m_rigidbody.linearDamping = originalDamping;
         m_isDash = false;
 
@@ -266,16 +257,6 @@ public class PlayerController : MonoBehaviour
             m_AnimController.SetDashing(false);
         }
     }
-
-    private void Attack()
-    {
-        Debug.Log($"in attack func공격 실행 : {m_ComboCom.currCombo}");
-        if(m_AnimController != null)
-        {
-            m_AnimController.TriggerAttack();
-        }
-    }
-
 
 }
 //�Ʒ� �ּ�ó���� �ڵ��� ������

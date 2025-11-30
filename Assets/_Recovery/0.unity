@@ -132,6 +132,8 @@ GameObject:
   - component: {fileID: 78425543}
   - component: {fileID: 78425546}
   - component: {fileID: 78425547}
+  - component: {fileID: 78425548}
+  - component: {fileID: 78425549}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -223,6 +225,8 @@ MonoBehaviour:
   m_layer:
     serializedVersion: 2
     m_Bits: 64
+  m_AnimController: {fileID: 0}
+  m_ComboCom: {fileID: 0}
 --- !u!114 &78425547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,6 +240,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAniController
   m_Animator: {fileID: 0}
+--- !u!114 &78425548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78425542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b775b980be6902b4aa1d01cd1d864702, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerComboAtk
+  m_Steps:
+  - m_StateName: Normal_1_slash
+    m_MaxStepTime: 0.8
+    m_ComboStart: 0.3
+    m_ComboEnd: 0.7
+  - m_StateName: Normal_2_thrust
+    m_MaxStepTime: 0.8
+    m_ComboStart: 0.3
+    m_ComboEnd: 0.7
+  - m_StateName: Normal_3_upperslash
+    m_MaxStepTime: 0.8
+    m_ComboStart: 0.3
+    m_ComboEnd: 0.7
+  - m_StateName: Normal_4_2_spike
+    m_MaxStepTime: 0.8
+    m_ComboStart: 0.3
+    m_ComboEnd: 0.7
+  m_InputBufferTime: 0.5
+  currCombo: -1
+--- !u!95 &78425549
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78425542}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 26884749826e6774aa58a039de667f50, type: 3}
+  m_Controller: {fileID: 9100000, guid: ca82a293c121a5940a7bf4bcfee0cae9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &226741375
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -294,6 +351,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5508318051045800028, guid: 26884749826e6774aa58a039de667f50, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 26884749826e6774aa58a039de667f50, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 26884749826e6774aa58a039de667f50, type: 3}

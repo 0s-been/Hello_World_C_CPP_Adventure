@@ -32,7 +32,10 @@ public class PlayerComboAtk : MonoBehaviour
     bool queuedNextCombo;
     //������ �Է� �ð��� ������ ����
     //������ �Է��� ���� �޺��� �Ѿ �� �ִ� ���� �Ǵ��ϴµ� ����
-    float lastInputTime;
+    float lastInputTime = -999f;
+
+    //외부에서 공격 중인지 확인할 수 있는 프로퍼티 추가
+    public bool IsAttacking => currCombo >= 0;
 
     void Start()
     {
@@ -41,10 +44,9 @@ public class PlayerComboAtk : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetMouseButton(0))
+        if(Input.GetMouseButtonDown(0))
         {
-            lastInputTime = Time.time;
-            StartComboAtk();
+            TryAttack();       
         }
 
         if(currCombo >= 0)
@@ -52,29 +54,27 @@ public class PlayerComboAtk : MonoBehaviour
             UpdateCombo();
         }
     }
-    void StartComboAtk()
+    void TryAttack()
     {
-        //������ ���� ���� ���� �޺� ����
         if(currCombo < 0)
         {
             StartCombo(0);
             return;
         }
-         
-        //���� ����� �޺������� ������ ������ ����
         var step = m_Steps[currCombo];
-        //�޺��� ���۵ǰ� �󸶳� �������� ������ ����
         float elapsed = Time.time - comboStartTime;
-
-        //elapsed�� �޺�Ÿ�̹� �ȿ� �ִٸ� true
         bool isInTiming = elapsed >= step.m_ComboStart &&
             elapsed <= step.m_ComboEnd;
-        //lastInputTime�� ����Ÿ�� ���� �ִٸ� true
-        bool withinBuffer = Time.time - lastInputTime <= m_InputBufferTime;
-
-        //�� �� ������ �����ȴٸ� ���� �޺��� �Ѿ�� ���� ���� ����
-        if(isInTiming && withinBuffer)
+        if(isInTiming)
+        {
+            //Debug.Log("Next Combo Queued");
             queuedNextCombo = true;
+            lastInputTime = Time.time;
+        }
+        else if(Time.time - lastInputTime <= m_InputBufferTime)
+        {
+            queuedNextCombo = true;
+        }
     }
 
     void StartCombo(int index)
@@ -85,6 +85,7 @@ public class PlayerComboAtk : MonoBehaviour
         comboStartTime = Time.time;
         //���� �޺��� �ڵ����� �Ѿ�� �ʵ��� false�� ����
         queuedNextCombo = false;
+        lastInputTime = Time.time;
 
         m_Anim.CrossFade(m_Steps[currCombo].m_StateName, 0.05f);
     }
@@ -120,5 +121,11 @@ public class PlayerComboAtk : MonoBehaviour
     {
         currCombo = -1;
         queuedNextCombo = false;
+    }
+
+    //외부에서 강제로 콤보 취소 시 사용할 리셋 함수
+    public void CancelCombo()
+    {
+        ResetCombo();
     }
 }
