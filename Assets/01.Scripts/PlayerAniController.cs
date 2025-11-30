@@ -7,7 +7,6 @@ public class PlayerAniController : MonoBehaviour
     private int m_HashSpeed = Animator.StringToHash("Speed");
     private int m_HashIsMoving = Animator.StringToHash("IsMoving");
     private int m_HashIsGrounded = Animator.StringToHash("IsGrounded");
-
     private int m_HashJump = Animator.StringToHash("Jump");
     private int m_HashDash = Animator.StringToHash("Dash");
     private int m_HashIsDashing = Animator.StringToHash("IsDashing");
@@ -17,6 +16,34 @@ public class PlayerAniController : MonoBehaviour
     void Awake()
     {
         m_Animator = GetComponent<Animator>();
+    }
+
+    //현재 애니메이션의 정규화된 시간 (0~1) 반환
+    public float GetNormalizedTime(int layer = 0)
+    {
+        if (m_Animator == null) return 0f;
+        AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(layer);
+        return stateInfo.normalizedTime % 1f;
+    }
+
+    //현재 특정 State가 재생 중인지 확인
+    public bool IsPlayingState(string stateName, int layer = 0)
+    {
+        if (m_Animator == null) return false;
+        AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(layer);
+        return stateInfo.IsName(stateName);
+    }
+
+    //현재 애니메이션이 특정 % 이상 재생됐는지 확인
+    public bool IsAnimationPast(float normalizedTime, int layer = 0)
+    {
+        return GetNormalizedTime(layer) >= normalizedTime;
+    }
+
+    //현재 애니메이션이 끝났는지 확인 (95% 이상)
+    public bool IsAnimationFinished(int layer = 0)
+    {
+        return GetNormalizedTime(layer) >= 0.95f;
     }
 
     //이동 상태 업데이트 PlayerController의 MovementHandle에서 호출

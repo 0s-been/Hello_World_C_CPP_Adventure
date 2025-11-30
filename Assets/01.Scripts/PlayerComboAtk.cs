@@ -8,9 +8,11 @@ public class ComboStep
     public string m_StateName;
     //�޺��� ����� �ð�
     public float m_MaxStepTime = 0.8f;
-    //���� �޺��� �Ѿ �� �ִ� �ð� ����
-    public float m_ComboStart = 0.3f;
-    public float m_ComboEnd = 0.7f;
+    //정규화된 시간으로 변경 (0~1, 애니메이션의 몇 % 지점)
+    [Range(0f, 1f)]
+    public float m_ComboStartNormalized = 0.6f;//애니메이션 60% 지점부터
+    [Range(0f, 1f)]
+    public float m_ComboEndNormalized = 0.9f;  //애니메이션 90% 지점까지
 }
 
 public class PlayerComboAtk : MonoBehaviour
@@ -56,15 +58,25 @@ public class PlayerComboAtk : MonoBehaviour
     }
     void TryAttack()
     {
-        if(currCombo < 0)
+        //m_Steps배열이 비어있을 때 널참조를 막기 위한 예외처리문
+        if (m_Steps == null || m_Steps.Length == 0)
+        {
+            Debug.Log("ComboStep 배열이 설정되지 않았습니다!");
+            return;
+        }
+
+        if (currCombo < 0)
         {
             StartCombo(0);
             return;
         }
         var step = m_Steps[currCombo];
-        float elapsed = Time.time - comboStartTime;
-        bool isInTiming = elapsed >= step.m_ComboStart &&
-            elapsed <= step.m_ComboEnd;
+
+        //현재 애니메이션의 정규화된 시간 가져오기
+        float normalizedTime = GetAniNomalizedTime();
+    
+        bool isInTiming = normalizedTime >= step.m_ComboStartNormalized &&
+            normalizedTime <= step.m_ComboEndNormalized;
         if(isInTiming)
         {
             //Debug.Log("Next Combo Queued");
@@ -81,13 +93,10 @@ public class PlayerComboAtk : MonoBehaviour
     {
         //Clamp�� index ������ ����
         currCombo = Mathf.Clamp(index, 0, m_Steps.Length - 1);
-        //�޺��� ���۵� �ð��� ����
-        comboStartTime = Time.time;
-        //���� �޺��� �ڵ����� �Ѿ�� �ʵ��� false�� ����
         queuedNextCombo = false;
         lastInputTime = Time.time;
 
-        m_Anim.CrossFade(m_Steps[currCombo].m_StateName, 0.05f);
+        m_Anim.CrossFade(m_Steps[currCombo].m_StateName, 0.1f);
     }
 
 
@@ -95,25 +104,32 @@ public class PlayerComboAtk : MonoBehaviour
     {
         //���� �޺� ������ ������ ���� ����
         var step = m_Steps[currCombo];
-        //���� �޺��� ���۵ǰ� �󸶰� ���������� ������ ����
-        float elapsed = Time.time - comboStartTime;
 
-        //���� �޺��� ������ �Ǿ��ְ� ���� �޺��� �Ѿ �� �ִ� �ð����
-        //�����ߴٸ� ���� �޺��� ����
-        if(queuedNextCombo && elapsed >= step.m_ComboStart)
+        //현재 애니메이션의 정규화된 시간 가져오기
+        float normalizedTime = GetAniNomalizedTime();
+
+        //다음 콤보가 예약되어 있고, 전환 가능 시점을 지났으면 다음 콤보 실행
+        if (queuedNextCombo && normalizedTime >= step.m_ComboStartNormalized)
         {
             int next = currCombo + 1;
             if (next < m_Steps.Length)
                 StartCombo(next);
-            //next�� m_Steps�� ũ�⸦ �ʰ��ϸ� �޺��� �ʱ�ȭ
             else
                 ResetCombo();
-
             return;
         }
-        //��� �ð��� �޺��� ������ �ð����� Ŀ���ٸ� �޺� �ʱ�ȭ
-        if(elapsed >= step.m_MaxStepTime)
+
+        //애니메이션이 거의 끝났으면 (95% 이상) 콤보 리셋
+        if (normalizedTime >= 0.95f && !queuedNextCombo)
             ResetCombo();
+    }
+
+    //현재 재생 중인 애니메이션의 정규화된 시간 (0~1) 반환
+    float GetAniNomalizedTime()
+    {
+        AnimatorStateInfo stateInfo = m_Anim.GetCurrentAnimatorStateInfo(0);
+        //normalizedTime이 1을 넘으면 루프된 것이므로 소수점만 사용
+        return stateInfo.normalizedTime % 1;
     }
 
     //�޺��� �ʱ�ȭ�ϴ� �Լ�
