@@ -8,12 +8,12 @@ public class PlayerController : MonoBehaviour
     //기본 이동 관련
     private float m_MoveSpeed = 10f;
     private float m_RotSpeed = 30f;
-    private float m_JumpHeight = 10f;
+    private float m_JumpHeight = 12f;
 
     //대시 관련
-    public float m_DashDistance = 10f;
+    public float m_DashDistance = 5f;
     private float m_dashcool = 0f;
-    private float m_dashduration = 0.15f;
+    private float m_dashduration = 1f;
     private float m_dashcoolTimer;
 
     //상태 관련

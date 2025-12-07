@@ -35,6 +35,8 @@ public class PlayerComboAtk : MonoBehaviour
     //������ �Է� �ð��� ������ ����
     //������ �Է��� ���� �޺��� �Ѿ �� �ִ� ���� �Ǵ��ϴµ� ����
     float lastInputTime = -999f;
+    //콤보 간격 시간
+    float ComboInterval = 0.15f;
 
     //외부에서 공격 중인지 확인할 수 있는 프로퍼티 추가
     public bool IsAttacking => currCombo >= 0;
@@ -70,6 +72,12 @@ public class PlayerComboAtk : MonoBehaviour
             StartCombo(0);
             return;
         }
+
+        //콤보 시작 직후에는 입력 무시 콤보 간격을 위헤
+        float timeSinceComboStart = Time.time - comboStartTime;
+        if(timeSinceComboStart < ComboInterval)
+            return;
+
         var step = m_Steps[currCombo];
 
         //현재 애니메이션의 정규화된 시간 가져오기
@@ -93,6 +101,7 @@ public class PlayerComboAtk : MonoBehaviour
     {
         //Clamp�� index ������ ����
         currCombo = Mathf.Clamp(index, 0, m_Steps.Length - 1);
+        comboStartTime = Time.time;
         queuedNextCombo = false;
         lastInputTime = Time.time;
 
@@ -104,6 +113,11 @@ public class PlayerComboAtk : MonoBehaviour
     {
         //���� �޺� ������ ������ ���� ����
         var step = m_Steps[currCombo];
+
+        //콤보 시작 직후에는 입력 무시 콤보 간격을 위헤
+        float timeSinceComboStart = Time.time - comboStartTime;
+        if (timeSinceComboStart < ComboInterval)
+            return;
 
         //현재 애니메이션의 정규화된 시간 가져오기
         float normalizedTime = GetAniNomalizedTime();
