@@ -12,6 +12,10 @@ public class PlayerAniController : MonoBehaviour
     private int m_HashIsDashing = Animator.StringToHash("IsDashing");
     private int m_HashVerticalVelocity = Animator.StringToHash("VerticalVelocity");
 
+    //skill 관련 해시
+    private int m_HashSkillE = Animator.StringToHash("SkillE");
+    private int m_HashSkillQ = Animator.StringToHash("SkillQ");
+
     //start 전에 실행되는 함수
     void Awake()
     {
@@ -94,5 +98,18 @@ public class PlayerAniController : MonoBehaviour
         if (m_Animator == null) return;
 
         m_Animator.SetFloat (m_HashVerticalVelocity, vel);
+    }
+
+    //q,e 스킬 트리거
+    public void TriggerSkillE()
+    {
+        if (m_Animator == null) return;
+        m_Animator.SetTrigger(m_HashSkillE);
+    }
+
+    public void TriggerSkillQ()
+    {
+        if (m_Animator == null) return;
+        m_Animator.SetTrigger(m_HashSkillQ);
     }
 }
