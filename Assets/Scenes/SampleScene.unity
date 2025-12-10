@@ -938,6 +938,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: fracturedrock
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8f077b743287c8f41ace9ff2940bba9b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2264,7 +2268,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7809331290410404023, guid: 0dd050efb10a21c4f8d1c3ab7e33f70b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7809331290410404023, guid: 0dd050efb10a21c4f8d1c3ab7e33f70b, type: 3}
       propertyPath: m_TagString
@@ -2958,7 +2962,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7809331290410404023, guid: 0dd050efb10a21c4f8d1c3ab7e33f70b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7809331290410404023, guid: 0dd050efb10a21c4f8d1c3ab7e33f70b, type: 3}
       propertyPath: m_TagString
@@ -3305,6 +3309,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 8f077b743287c8f41ace9ff2940bba9b, type: 3}
       propertyPath: m_Name
       value: fracturedrock
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8f077b743287c8f41ace9ff2940bba9b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3903,7 +3911,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7809331290410404023, guid: 0dd050efb10a21c4f8d1c3ab7e33f70b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7809331290410404023, guid: 0dd050efb10a21c4f8d1c3ab7e33f70b, type: 3}
       propertyPath: m_TagString
@@ -4481,6 +4489,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: fracturedrock
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8f077b743287c8f41ace9ff2940bba9b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4858,63 +4870,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a9c320c5d6faab747a60c6361e861995, type: 3}
---- !u!1001 &4116834770755010743
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1494207957015728528, guid: 3feefff542d76774dbd209cfe055b4cd, type: 3}
-      propertyPath: m_Name
-      value: fracturedrock
-      objectReference: {fileID: 0}
-    - target: {fileID: 2303501689275829034, guid: 3feefff542d76774dbd209cfe055b4cd, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -2.53
-      objectReference: {fileID: 0}
-    - target: {fileID: 2303501689275829034, guid: 3feefff542d76774dbd209cfe055b4cd, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.36859
-      objectReference: {fileID: 0}
-    - target: {fileID: 2303501689275829034, guid: 3feefff542d76774dbd209cfe055b4cd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -4.67598
-      objectReference: {fileID: 0}
-    - target: {fileID: 2303501689275829034, guid: 3feefff542d76774dbd209cfe055b4cd, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2303501689275829034, guid: 3feefff542d76774dbd209cfe055b4cd, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.000000037748947
-      objectReference: {fileID: 0}
-    - target: {fileID: 2303501689275829034, guid: 3feefff542d76774dbd209cfe055b4cd, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2303501689275829034, guid: 3feefff542d76774dbd209cfe055b4cd, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2303501689275829034, guid: 3feefff542d76774dbd209cfe055b4cd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2303501689275829034, guid: 3feefff542d76774dbd209cfe055b4cd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2303501689275829034, guid: 3feefff542d76774dbd209cfe055b4cd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3feefff542d76774dbd209cfe055b4cd, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -4925,4 +4880,3 @@ SceneRoots:
   - {fileID: 78425545}
   - {fileID: 1331508792}
   - {fileID: 1799435014}
-  - {fileID: 4116834770755010743}

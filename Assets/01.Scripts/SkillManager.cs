@@ -20,7 +20,7 @@ public class SkillManager : MonoBehaviour
     [SerializeField] private float m_SkillQcooltime = 10f;
     private int m_RockCount = 4;
     //바위 간격
-    private float m_RockSpaicing = 1.5f;
+    private float m_RockSpaicing = 2.0f;
     private float m_RockSpawnDelay = 0.2f;
     //첫 생성 바위와 플레이어 사이의 간격
     private float m_RockStartDistance = 1f;
@@ -28,12 +28,13 @@ public class SkillManager : MonoBehaviour
     private bool m_IsUsingSkill_Q = false;
     private string m_Skill_Q_Name = "Q_skill_strike_wave";
     //첫 바위의 기본 크기
-    private float m_RockStartScale = 1f;
+    private float m_RockStartScale = 2f;
     //다음 바위의 크기 증가량
-    private float m_RockScaleIncrease = 0.3f;
+    private float m_RockScaleIncrease = 0.6f;
     //바위 생성 시 랜덤 회전 범위
-    private float m_RockRandomRotationY = 30f;
-    private float m_RockRandomRotationXZ = 5f;
+    //연달아 생성 되는 바위가 더 자연스럽도록 하기 위해 랜덤 회전을 추가함
+    private float m_RockRandomRotationY = 90f;
+    private float m_RockRandomRotationXZ = 30f;
 
     //이 getter 더 공부 필요
     public bool IsUsingSkill => m_IsUsingSkill_E || m_IsUsingSkill_Q;
@@ -182,7 +183,7 @@ public class SkillManager : MonoBehaviour
             float distance = m_RockStartDistance + (i * m_RockSpaicing);
             Vector3 spawnPos =startpos + forward * distance;
             //땅 밑에서 시작하도록 초기 y값 설정
-            spawnPos.y = startpos.y - 2f;
+            spawnPos.y = startpos.y - 1.5f;
 
             //랜덤 회전
             float randX = Random.Range(-m_RockRandomRotationXZ, m_RockRandomRotationXZ);

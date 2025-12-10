@@ -8,11 +8,11 @@ using UnityEngine.VFX;
 //e스킬 투사체 클래스 
 public class SlashProjectile : MonoBehaviour
 {
-    private float m_Speed = 5f;
+    private float m_Speed = 7f;
     private float m_Damage = 10f;
     private float m_Lifetime = 3f;
     //삭제 딜레이
-    private float m_DestroyDelay = 0.2f;
+    private float m_DestroyDelay = 0.4f;
     //삭제 중인 상태 여부
     private bool m_IsDestroying = false;
 
@@ -48,13 +48,13 @@ public class SlashProjectile : MonoBehaviour
 
         if (other.CompareTag("Player")) return;
 
-        //if(other.CompareTag("Enemy"))
-        //{
-        //    m_HitTargets.Add(other);
-        //    Debug.Log($"검기가 {other.name}에게 {m_Damage}의 피해를 입힘.");
-        //}
+        if (other.CompareTag("Enemy"))
+        {
+            m_HitTargets.Add(other);
+            Debug.Log($"검기가 {other.name}에게 {m_Damage}의 피해를 입힘.");
+        }
 
-        if(other.CompareTag("Rock"))
+        if (other.CompareTag("Rock"))
         {
             //코루틴을 통해 딜레이가 지난 후 오브젝트가 삭제되도록 함
             if (!m_IsDestroying)

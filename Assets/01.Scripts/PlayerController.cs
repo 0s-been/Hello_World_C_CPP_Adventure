@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     //대시 관련
     public float m_DashDistance = 5f;
     private float m_dashcool = 0f;
-    private float m_dashduration = 1f;
+    private float m_dashduration = 0.7f;
     private float m_dashcoolTimer;
 
     //상태 관련
