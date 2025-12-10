@@ -1,5 +1,6 @@
 using UnityEngine;
-
+//https://www.youtube.com/watch?v=4611qmBWTC0&t=142s
+//위 영상을 통해 공부한 후 작성한 코드입니다.
 public class PlayerCamera : MonoBehaviour
 {
     //추적할 대상

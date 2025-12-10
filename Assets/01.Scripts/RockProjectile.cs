@@ -37,10 +37,11 @@ public class RockProjectile : MonoBehaviour
 
     }
 
+    //바위가 밑에서 솟아오르는 느낌을 주는 코루틴 함수
     IEnumerator Rise()
     {
         m_IsRising = true;
-
+        //시작과 끝 좌표값 설정
         Vector3 startPos = transform.position;
         Vector3 endPos = startPos + Vector3.up * m_RiseHeight;
         float elapsed = 0f;
@@ -62,6 +63,7 @@ public class RockProjectile : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player")) return;
+        //같은 오브젝트와의 중복 충돌 방지
         if (m_HitTargets.Contains(other)) return;
 
         if (other.CompareTag("Enemy"))
@@ -70,17 +72,22 @@ public class RockProjectile : MonoBehaviour
             Debug.Log($"암석이 {other.name}에게 {m_Damage}의 피해");
         }
 
+        //검기 투사체와의 충돌 시
         if (other.CompareTag("SlashProjectile"))
         {
+            //이미 삭제 예정이 되어 있지 않은 바위오브젝트라면
             if(!m_IsDestroyed)
             {
+                //바위 모양의 부모 오브젝트는 삭제처리하고
                 m_IsDestroyed = true;
+                //검기의 방향을 구해서
                 Vector3 slashDirection = other.transform.forward;
+                //파편화 하는 함수 호출
                 Explode(slashDirection);
             }
         }
     }
-
+    //바위가 검기에 충돌 시 파편화 하는 함수
     void Explode(Vector3 hitDirection)
     {
         //부모의 Collider 비활성화 -> 추가 충돌 방지

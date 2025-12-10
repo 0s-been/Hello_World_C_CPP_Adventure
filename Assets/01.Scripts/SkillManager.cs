@@ -50,8 +50,10 @@ public class SkillManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //쿨타임 갱신
         UpdateCooldowns();
 
+        //입력값에 따른 스킬 사용 시도
         if (Input.GetKeyDown(KeyCode.E))
         {
             TryUseSkillE();
@@ -60,6 +62,7 @@ public class SkillManager : MonoBehaviour
         {
             TryUseSkillQ();
         }
+        //특정 스킬을 사용 중이라면 그 스킬에 대한 정보들 갱신
         if (m_IsUsingSkill_E)
         {
             UpdateSkillE();
@@ -91,17 +94,16 @@ public class SkillManager : MonoBehaviour
         m_IsUsingSkill_E = true;
         m_Skill_E_timer = m_SkillECooltime;
 
-        //nullable로 안정성 검사
+        //nullable로 안정성 검사 및 트리거 처리
         m_PlayerAniController?.TriggerSkillE();
     }
 
     void UpdateSkillE()
     {
+        //애니메이션컨트롤러가 연결되어 있지 않으면 return처리
         if (m_PlayerAniController == null) return;
 
-        
-
-        //IsPlayingState,IsAnimationFinished 함수 좀 더 공부해보기
+        //IsPlayingState,IsAnimationFinished 함수를 통해 애니메이션 진행률에 따라 상태 갱신
         if (!m_PlayerAniController.IsPlayingState(m_Skill_E_Name))
         {
             return;
@@ -112,6 +114,7 @@ public class SkillManager : MonoBehaviour
         }
     }
 
+    //애니메이션 이벤트를 통해 호출
     public void OnFireSkillE()
     {
         if (m_Slashprefab == null)
@@ -119,6 +122,7 @@ public class SkillManager : MonoBehaviour
             Debug.Log("m_Slashprefab 미설정");
             return;
         }
+        //e스킬 투사체 스폰 위치
         Vector3 spawnpos;
         if (m_Spawnpoint != null)
         {
@@ -129,6 +133,7 @@ public class SkillManager : MonoBehaviour
             spawnpos = transform.position + transform.forward * m_SpawnOffset + Vector3.up * m_SpawnHeight;
         }
 
+        //투사체 생성
         GameObject slash = Instantiate(m_Slashprefab, spawnpos, Quaternion.identity);
         SlashProjectile projectile = slash.GetComponent<SlashProjectile>();
         projectile?.SetDirection(transform.forward);
@@ -143,14 +148,15 @@ public class SkillManager : MonoBehaviour
 
         m_IsUsingSkill_Q = true;
         m_Skill_Q_timer = m_SkillQcooltime;
-        //nullable로 안정성 검사
+        //nullable로 안정성 검사 및 트리거 처리
         m_PlayerAniController?.TriggerSkillQ();
     }
 
     void UpdateSkillQ()
     {
         if (m_PlayerAniController == null) return;
-        //IsPlayingState,IsAnimationFinished 함수 좀 더 공부해보기
+
+        //IsPlayingState,IsAnimationFinished 함수를 통해 애니메이션 진행률에 따라 상태 갱신
         if (!m_PlayerAniController.IsPlayingState(m_Skill_Q_Name))
         {
             return;
@@ -161,6 +167,7 @@ public class SkillManager : MonoBehaviour
         }
     }
 
+    //애니메이션 이벤트를 통해 호출
     public void OnFireSkillQ()
     {
         if (m_RockPrefab == null)
@@ -172,6 +179,7 @@ public class SkillManager : MonoBehaviour
         StartCoroutine(SpawnRocks());
     }
 
+    //바위 생성 코루틴 함수
     IEnumerator SpawnRocks()
     {
         Vector3 forward = transform.forward;

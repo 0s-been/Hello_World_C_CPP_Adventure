@@ -1,39 +1,46 @@
 using UnityEngine;
 
 
-//MonoBehaviour�� ��� ����Ƽ inspectorâ�� �߰� ����
+//https://www.youtube.com/watch?v=egnQTod1Vyk
+//위 영상으로 공부한 후 작성한 코드입니다.
+//MonoBehaviour를 상속해 유니티 Inspector창에 추가 가능
 [System.Serializable]
+//한 콤보공격에 대한 클래스
 public class ComboStep 
 {
+    //애니메이션 이름
     public string m_StateName;
-    //�޺��� ����� �ð�
+    //콤보가 유지될 시간
     public float m_MaxStepTime = 0.8f;
     //정규화된 시간으로 변경 (0~1, 애니메이션의 몇 % 지점)
+    //애니메이션 60% 지점부터
     [Range(0f, 1f)]
-    public float m_ComboStartNormalized = 0.6f;//애니메이션 60% 지점부터
+    public float m_ComboStartNormalized = 0.6f;
+    //애니메이션 90% 지점까지
     [Range(0f, 1f)]
-    public float m_ComboEndNormalized = 0.9f;  //애니메이션 90% 지점까지
+    public float m_ComboEndNormalized = 0.9f;  
 }
 
 public class PlayerComboAtk : MonoBehaviour
 {
     [SerializeField]
+    //콤보를 배열로 만들어서 콤보공격을 구현
     ComboStep[] m_Steps;
 
     [SerializeField]
-    //���� �޺������� ���� �̾��ֱ� ���� �� �Է°��� �������ִ� �ð�
+    //다음 콤보공격을 이어주기 위한 입력값을 저장해주는 시간
     float m_InputBufferTime = 0.2f;
     Animator m_Anim;
 
-    //���� �޺� �ε����� -1�� �޺����� ���� x
+    //현재 콤보 인덱스가 -1면 콤보공격 중이 아님
     public int currCombo = -1;
-    //���� ���� ���� �޺������� ���� �����ߴ� �� ������ ����
-    //->���� �ð��� ���� �޺��� �Ѿ �� �ִ� �� �Ǵ�
+    //현재 실행 중인 콤보공격이 언제 시작했는지 알 저장할 변수
+    //->경과 시간이 다음 콤보로 넘어갈 수 있는지 판단
     float comboStartTime;
-    //���� �޺��� �Ѿ �� �ִ� ������ �����Ǿ����� Ȯ���ϴ� ����
+    //다음 콤보로 넘어갈 수 있는 입력이 예약되었는지 확인하는 변수
     bool queuedNextCombo;
-    //������ �Է� �ð��� ������ ����
-    //������ �Է��� ���� �޺��� �Ѿ �� �ִ� ���� �Ǵ��ϴµ� ����
+    //마지막 입력 시간을 저장할 변수
+    //->마지막 입력이 다음 콤보로 넘어갈 수 있는 범위 판단하는데 사용
     float lastInputTime = -999f;
     //콤보 간격 시간
     float ComboInterval = 0.15f;
@@ -99,7 +106,7 @@ public class PlayerComboAtk : MonoBehaviour
 
     void StartCombo(int index)
     {
-        //Clamp�� index ������ ����
+        //Clamp로 index 범위를 제한
         currCombo = Mathf.Clamp(index, 0, m_Steps.Length - 1);
         comboStartTime = Time.time;
         queuedNextCombo = false;
@@ -111,7 +118,7 @@ public class PlayerComboAtk : MonoBehaviour
 
     void UpdateCombo()
     {
-        //���� �޺� ������ ������ ���� ����
+        //현재 콤보 스텝의 정보를 가져와 저장
         var step = m_Steps[currCombo];
 
         //콤보 시작 직후에는 입력 무시 콤보 간격을 위헤
@@ -146,7 +153,7 @@ public class PlayerComboAtk : MonoBehaviour
         return stateInfo.normalizedTime % 1;
     }
 
-    //�޺��� �ʱ�ȭ�ϴ� �Լ�
+    //콤보를 초기화하는 함수
     void ResetCombo()
     {
         currCombo = -1;

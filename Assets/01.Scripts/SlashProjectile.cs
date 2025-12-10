@@ -8,10 +8,11 @@ using UnityEngine.VFX;
 //e스킬 투사체 클래스 
 public class SlashProjectile : MonoBehaviour
 {
+    //투사체의 stat정보
     private float m_Speed = 7f;
     private float m_Damage = 10f;
     private float m_Lifetime = 3f;
-    //삭제 딜레이
+    //삭제 딜레이 -> 하나의 투사체로 여러 오브젝트들에 충돌 처리를 주기 위해
     private float m_DestroyDelay = 0.4f;
     //삭제 중인 상태 여부
     private bool m_IsDestroying = false;
@@ -21,18 +22,21 @@ public class SlashProjectile : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //시작하자 마자 m_Lifetime 지난 후 삭제하도록 설정
         Destroy(gameObject, m_Lifetime);
     }
 
     // Update is called once per frame
     void Update()
     {
+        //날아갈 방향 설정
         transform.position += m_dir * m_Speed * Time.deltaTime;
     }
 
     //skillmanger에서 방향 설정용으로 호출
     public void SetDirection(Vector3 dir)
     {
+        //방향만 필요하므로 정규화
         m_dir = dir.normalized;
         if(m_dir != Vector3.zero)
         {
@@ -44,8 +48,10 @@ public class SlashProjectile : MonoBehaviour
     {
         Debug.Log($"충돌 감지: {other.name}, Tag: {other.tag}");
 
+        //중복 충돌 처리를 방지하기 위해
         if (m_HitTargets.Contains(other)) return;
 
+        //플레이어와의 충돌은 무시
         if (other.CompareTag("Player")) return;
 
         if (other.CompareTag("Enemy"))
