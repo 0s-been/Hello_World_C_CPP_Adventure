@@ -7,6 +7,9 @@ TagManager:
   - SlashProjectile
   - Rock
   - Enemy
+  - Arrow
+  - StatObject
+  - Bow
   layers:
   - Default
   - TransparentFX
@@ -15,8 +18,8 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
-  - 
+  - MiniGame
+  - MiniGameUI
   - 
   - 
   - 

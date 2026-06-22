@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f84b1361cb924b4aa82efc9e076ac28, type: 3}
+  m_Name: Stage01
+  m_EditorClassIdentifier: Assembly-CSharp::StatObjectGridData
+  rows: 3
+  cols: 4
+  offset: 1.5
+  statobjList:
+  - {fileID: 11400000, guid: bf2c566783048474db63637e6100ec69, type: 2}
+  - {fileID: 11400000, guid: 4450077a37226ce40be7dd570dc031d6, type: 2}
+  - {fileID: 11400000, guid: 04e80d5f1f1e0ff4b8a7428aea796bf9, type: 2}
+  - {fileID: 11400000, guid: 4505f3c6261baa446a4e43b278af2f16, type: 2}
+  - {fileID: 11400000, guid: 72705bea60083384e81e07fed8053431, type: 2}
+  - {fileID: 11400000, guid: 4450077a37226ce40be7dd570dc031d6, type: 2}
+  - {fileID: 11400000, guid: 72705bea60083384e81e07fed8053431, type: 2}
+  - {fileID: 11400000, guid: 746810b1056bed241927e81db9b9beb2, type: 2}
+  - {fileID: 11400000, guid: 928c196094fe5b54faf0f4d53b47fb48, type: 2}
+  - {fileID: 11400000, guid: 4c097bbd033277c4e83c6460ee431981, type: 2}
+  - {fileID: 11400000, guid: df0eb7c706fd1a04e8416384a1ae320a, type: 2}
+  - {fileID: 11400000, guid: eef1246d3c8c058489b2202045aec9a6, type: 2}
