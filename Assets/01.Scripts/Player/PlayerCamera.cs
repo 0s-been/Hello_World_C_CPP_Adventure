@@ -33,21 +33,25 @@ public class PlayerCamera : MonoBehaviour
     public LayerMask m_LayerMask;
 
     private InputReader m_InputReader;
-    private bool m_IsMiniGameActive = false;
+    //private bool m_IsMiniGameActive = false;
 
     void Awake()
     {
         // InputReader 찾기
         if (m_Target != null)
+        {
             m_InputReader = m_Target.GetComponent<InputReader>();
+        }
 
         if (m_InputReader == null)
+        {
             m_InputReader = FindAnyObjectByType<InputReader>();
+        }
 
-        if (m_InputReader != null)
-            m_InputReader.OnMiniGameInput += OnMiniGameInput;
-        else
-            Debug.LogError("씬에서 InputReader를 찾지 못함!");
+        InputBlocker.OnBlockChanged += OnInputBlockChanged;
+
+        //else
+        //Debug.LogError("씬에서 InputReader를 찾지 못함!");
     }
 
     void Start()
@@ -57,26 +61,19 @@ public class PlayerCamera : MonoBehaviour
         m_Normaldir = m_RealCamera.localPosition.normalized;
         m_FinalDistance = m_RealCamera.localPosition.magnitude;
 
-        m_IsMiniGameActive = false;
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     void OnDestroy()
     {
-        if (m_InputReader != null)
-            m_InputReader.OnMiniGameInput -= OnMiniGameInput;
+        InputBlocker.OnBlockChanged -= OnInputBlockChanged;
     }
 
-    private void OnMiniGameInput()
+    private void OnInputBlockChanged(bool blocked)
     {
-        m_IsMiniGameActive = !m_IsMiniGameActive;
-        Debug.Log($"PlayerCamera OnMiniGameInput 호출됨. 활성화: {m_IsMiniGameActive}");
-
-        if (m_IsMiniGameActive)
+        if (blocked)
         {
-            //미니게임 진입 시 커서 표시
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             //현재 마우스 입력값 초기화
@@ -86,7 +83,6 @@ public class PlayerCamera : MonoBehaviour
         }
         else
         {
-            //미니게임 퇴장 시 커서 숨김
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
@@ -97,10 +93,12 @@ public class PlayerCamera : MonoBehaviour
     {
 
         // 미니게임 중 카메라 회전 차단
-        if (m_IsMiniGameActive)
+        if (InputBlocker.IsBlocked)
         {
-            Debug.Log("카메라 회전 차단 중");
-            return; }
+            //Debug.Log("카메라 회전 차단 중");
+            return;
+        }
+
 
         //마우스를 상하로 움직일 때 카메라는 x축 기준 회전
         m_rotX -= Input.GetAxis("Mouse Y") * m_Msensitivity * Time.deltaTime;

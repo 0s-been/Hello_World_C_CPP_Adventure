@@ -1,0 +1,10 @@
+{
+  "items": [
+    { "id": "sword",  "name": "검",   "width": 1, "height": 3, "equipPart": "Weapon" },
+    { "id": "shield", "name": "방패", "width": 2, "height": 2, "equipPart": "Top" },
+    { "id": "potion", "name": "물약", "width": 1, "height": 1, "equipPart": "None" },
+    { "id": "helmet", "name": "투구", "width": 2, "height": 2, "equipPart": "Head" },
+    { "id": "boots",  "name": "장화", "width": 2, "height": 2, "equipPart": "Shoes" },
+    { "id": "bow",    "name": "활",   "width": 1, "height": 3, "equipPart": "Weapon" }
+  ]
+}

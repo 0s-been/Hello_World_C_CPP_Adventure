@@ -20,6 +20,9 @@ public class InputReader : MonoBehaviour
     //K키 스킬트리UI창 
     public event Action OnMiniGameInput;
 
+    //I키 인벤토리
+    public event Action OnInventoryInput;
+
     void Update()
     {
         // 이동 입력 — 매 프레임 발행 (0,0도 포함, 이동 중단 감지를 위해)
@@ -44,8 +47,14 @@ public class InputReader : MonoBehaviour
             OnSkillEInput?.Invoke();
         if (Input.GetKeyDown(KeyCode.K))
         {
-            Debug.Log("K키 입력 감지");
+            //Debug.Log("K키 입력 감지");
             OnMiniGameInput?.Invoke();
+        }
+
+        if(Input.GetKeyDown(KeyCode.I))
+        {
+            Debug.Log("I키 입력 감지");
+            OnInventoryInput?.Invoke();
         }
     }
 }

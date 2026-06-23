@@ -97,7 +97,8 @@ public class PlayerController : MonoBehaviour
     //######리팩토링한 update에서는 상태 체크와 애니메이션 브릿지의 Tick만 담당하도록 변경하였습니다. -> srp 원칙 적용
     void Update()
     {
-        if (m_IsMiniGameActive) return;
+        //if (m_IsMiniGameActive) return;
+        if (InputBlocker.IsBlocked) return;
 
         CheckGrounded();
         m_AnimBridge?.Tick();
@@ -107,7 +108,8 @@ public class PlayerController : MonoBehaviour
     //이벤트와 플래그 부분은 ai의 도움을 받아 구현하였습니다...
     void FixedUpdate()
     {
-        if (m_IsMiniGameActive) return;
+        //if (m_IsMiniGameActive) return;
+        if (InputBlocker.IsBlocked) return;
 
         if (!m_Dash.IsDashing)
         {

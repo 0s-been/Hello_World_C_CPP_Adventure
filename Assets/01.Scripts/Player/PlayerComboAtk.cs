@@ -52,9 +52,6 @@ public class PlayerComboAtk : MonoBehaviour, IAttackState
     //외부에서 공격 중인지 확인할 수 있는 프로퍼티 추가
     public bool IsAttacking => currCombo >= 0;
 
-    private bool m_IsMiniGameActive = false;
-
-
     void Start()
     {
         m_Anim = GetComponent<Animator>();
@@ -63,7 +60,7 @@ public class PlayerComboAtk : MonoBehaviour, IAttackState
         if (m_InputReader != null)
         {
             m_InputReader.OnAttackInput += TryAttack;
-            m_InputReader.OnMiniGameInput += OnMiniGameInput;
+            InputBlocker.OnBlockChanged += OnInputBlockChanged;
         }
     }
 
@@ -72,16 +69,13 @@ public class PlayerComboAtk : MonoBehaviour, IAttackState
         if (m_InputReader != null)
         {
             m_InputReader.OnAttackInput -= TryAttack;
-            m_InputReader.OnMiniGameInput -= OnMiniGameInput;
+            InputBlocker.OnBlockChanged -= OnInputBlockChanged;
         }
     }
-
-    private void OnMiniGameInput()
+    
+    private void OnInputBlockChanged(bool blocked)
     {
-        m_IsMiniGameActive = !m_IsMiniGameActive;
-
-        //미니게임 진입 시 진행 중인 콤보 취소
-        if (m_IsMiniGameActive) CancelCombo();
+        if(blocked) CancelCombo();
     }
 
     void Update()
@@ -95,7 +89,7 @@ public class PlayerComboAtk : MonoBehaviour, IAttackState
     {
 
         //미니게임 중 공격 차단
-        if (m_IsMiniGameActive) return;
+        if (InputBlocker.IsBlocked) return;
 
         //m_Steps배열이 비어있을 때 널참조를 막기 위한 예외처리문
         if (m_Steps == null || m_Steps.Length == 0)

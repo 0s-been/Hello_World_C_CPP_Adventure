@@ -1,0 +1,7 @@
+id,name,width,height,equipPart
+sword,검,1,3,Weapon
+shield,방패,2,2,Top
+potion,물약,1,1,None
+helmet,투구,2,2,Head
+boots,장화,2,2,Shoes
+bow,활,1,3,Weapon

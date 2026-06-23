@@ -42,7 +42,6 @@ public class SkillManager : MonoBehaviour
     private PlayerAniController m_PlayerAniController;
 
     private InputReader m_InputReader;
-    private bool m_IsMiniGameActive = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -52,8 +51,7 @@ public class SkillManager : MonoBehaviour
         if (m_InputReader != null)
         {
             m_InputReader.OnSkillQInput += TryUseSkillQ;
-            m_InputReader.OnSkillEInput += TryUseSkillE;
-            m_InputReader.OnMiniGameInput += OnMiniGameInput;
+            m_InputReader.OnSkillEInput += TryUseSkillE;     
         }
     }
 
@@ -62,22 +60,18 @@ public class SkillManager : MonoBehaviour
         if (m_InputReader != null)
         {
             m_InputReader.OnSkillQInput -= TryUseSkillQ;
-            m_InputReader.OnSkillEInput -= TryUseSkillE;
-            m_InputReader.OnMiniGameInput -= OnMiniGameInput;
+            m_InputReader.OnSkillEInput -= TryUseSkillE;         
         }
     }
 
-    private void OnMiniGameInput()
-    {
-        m_IsMiniGameActive = !m_IsMiniGameActive;
-    }
+   
 
     // Update is called once per frame
     void Update()
     {
 
         //미니게임 중 입력 무시
-        if (m_IsMiniGameActive) return;
+        if (InputBlocker.IsBlocked) return;
 
         //쿨타임 갱신
         UpdateCooldowns();
@@ -102,7 +96,7 @@ public class SkillManager : MonoBehaviour
     //--------------------E스킬 함수들-------------------//
     void TryUseSkillE()
     {
-        if (m_IsMiniGameActive) return;
+        if (InputBlocker.IsBlocked) return;
         if (m_Skill_E_timer > 0 || m_IsUsingSkill_E) return;
 
         m_IsUsingSkill_E = true;
@@ -155,7 +149,7 @@ public class SkillManager : MonoBehaviour
     //--------------------Q스킬 함수들-------------------//
     void TryUseSkillQ()
     {
-        if (m_IsMiniGameActive) return;
+        if (InputBlocker.IsBlocked) return;
         if (m_Skill_Q_timer > 0 || m_IsUsingSkill_Q) return;
 
         m_IsUsingSkill_Q = true;
