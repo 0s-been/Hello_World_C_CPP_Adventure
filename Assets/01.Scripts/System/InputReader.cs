@@ -53,7 +53,7 @@ public class InputReader : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.I))
         {
-            Debug.Log("I키 입력 감지");
+            //Debug.Log("I키 입력 감지");
             OnInventoryInput?.Invoke();
         }
     }

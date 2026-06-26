@@ -23,5 +23,7 @@ namespace OnionArc.Model
         bool RemoveAt(int row, int col);
         /// <summary> 해당 위치의 아이템을 인벤 내에서 get</summary>
         PlacedItem GetItemAt(int row, int col);
+        bool TryMove(int frow, int fcol, int trow, int tcol);
+
     }
 }

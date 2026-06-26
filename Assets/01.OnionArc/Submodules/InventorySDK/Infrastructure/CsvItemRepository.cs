@@ -9,10 +9,7 @@ namespace InventorySDK.Infrastructure
 {
 
     /// <summary>
-    /// IItemRepositoryDomain의 CSV 구현체 
-    /// CSV 형식 (1행은 헤더)
-    ///   id,name,width,height,equipPart
-    ///   sword,검,1,3,Weapon
+    /// IItemRepositoryDomain의 csv 구현체 
     /// </summary>
     public class CsvItemRepository : IItemRepositoryDomain
     {
@@ -25,8 +22,6 @@ namespace InventorySDK.Infrastructure
 
         public IObservable<IReadOnlyList<ItemInfo>> LoadItems()
         {
-            // Observable.Start로 감싸지 않고, 로컬 파일이라 즉시 읽어 Return으로 통지.
-            // (원격이었다면 비동기 스트림으로 바꾸면 됨 — 인터페이스는 그대로)
             var items = ParseCsv(ReadRaw());
             return Observable.Return((IReadOnlyList<ItemInfo>)items);
         }
@@ -36,7 +31,6 @@ namespace InventorySDK.Infrastructure
             string path = Path.Combine(UnityEngine.Application.streamingAssetsPath, _fileName);
             if (!File.Exists(path))
             {
-                //Debug.LogWarning($"[CsvItemRepository] 파일 없음: {path} → 빈 목록 반환");
                 return string.Empty;
             }
             return File.ReadAllText(path);
@@ -57,17 +51,19 @@ namespace InventorySDK.Infrastructure
                 if (line.Length == 0) continue;
 
                 var cols = line.Split(',');
-                if (cols.Length < 5) continue; // 형식 불량 행은 무시
+                if (cols.Length < 5) continue; // 최소 5열 필요 desc는 비워도 됨
 
                 string id   = cols[0].Trim();
                 string name = cols[1].Trim();
 
-                // 숫자 파싱 실패 시 안전한 기본값(1)로 런타임 에러 방지
                 int width  = ParseIntOr(cols[2], 1);
                 int height = ParseIntOr(cols[3], 1);
                 EquipPart part = ParseEquipPart(cols[4]);
 
-                result.Add(new ItemInfo(id, name, width, height, part));
+                // description은 없으면 빈 문자열
+                string description = cols.Length >= 6 ? cols[5].Trim() : "";
+
+                result.Add(new ItemInfo(id, name, width, height, part, description));
             }
             return result;
         }

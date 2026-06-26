@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using InventorySDK.Domain;
 
 namespace InventorySDK.Application
 {
-    using InventorySDK.Domain;
 
     /// <summary>
-    /// 아이템 데이터 로드 유스케이스의 계약.
+    /// 아이템 데이터 로드 유스케이스 interface
     /// </summary>
     public interface IItemRepositoryApplication
     {

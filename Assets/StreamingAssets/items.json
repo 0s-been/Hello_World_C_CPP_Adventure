@@ -1,10 +1,53 @@
 {
   "items": [
-    { "id": "sword",  "name": "검",   "width": 1, "height": 3, "equipPart": "Weapon" },
-    { "id": "shield", "name": "방패", "width": 2, "height": 2, "equipPart": "Top" },
-    { "id": "potion", "name": "물약", "width": 1, "height": 1, "equipPart": "None" },
-    { "id": "helmet", "name": "투구", "width": 2, "height": 2, "equipPart": "Head" },
-    { "id": "boots",  "name": "장화", "width": 2, "height": 2, "equipPart": "Shoes" },
-    { "id": "bow",    "name": "활",   "width": 1, "height": 3, "equipPart": "Weapon" }
+    { 
+      "id": "Normalhat",   "name": "일반투구",   "width": 2, "height": 2, "equipPart": "Hat",    
+      "description": "초보자에게 적합한 기본적인 투구."  
+    },
+    { 
+      "id": "Normalchest", "name": "일반상의",   "width": 2, "height": 3, "equipPart": "Chest",
+      "description": "초보자에게 적합한 기본적인 상의."      
+    },
+    { 
+      "id": "Normallegs",  "name": "일반하의",   "width": 2, "height": 3, "equipPart": "Legs",
+      "description": "초보자에게 적합한 기본적인 하의."   
+    },
+    { 
+      "id": "Normalshoes", "name": "일반장화",   "width": 2, "height": 2, "equipPart": "Shoes",
+      "description": "초보자에게 적합한 기본적인 장화."  
+    },
+    { 
+      "id": "Normalsword", "name": "일반검",     "width": 1, "height": 3, "equipPart": "Weapon",
+      "description": "초보자에게 적합한 기본적인 검."  
+    },
+    { 
+      "id": "Enhancedlhat",   "name": "강화투구",   "width": 2, "height": 2, "equipPart": "Hat",
+      "description": "숙련된 모험가에게 적합한 고품질의 투구."  
+    },
+    { 
+      "id": "Enhancedchest",  "name": "강화상의",   "width": 2, "height": 3, "equipPart": "Chest",
+      "description": "숙련된 모험가에게 적합한 고품질의 상의."  
+    },
+    { 
+      "id": "Enhancedlegs",   "name": "강화하의",   "width": 2, "height": 3, "equipPart": "Legs",
+      "description": "숙련된 모험가에게 적합한 고품질의 하의."  
+    },
+    { 
+      "id": "Enhancedshoes",  "name": "강화장화",   "width": 2, "height": 2, "equipPart": "Shoes",
+      "description": "숙련된 모험가에게 적합한 고품질의 장화."  
+    },
+    { 
+      "id": "Enhancedsword",  "name": "강화검",     "width": 1, "height": 3, "equipPart": "Weapon",
+      "description": "숙련된 모험가에게 적합한 고품질의 검."  
+    },
+    { 
+      "id": "potionHP",   "name": "HP물약",   "width": 1, "height": 1, "equipPart": "None",
+      "description": "HP를 회복 시켜주는 물약."  
+    },
+    { 
+      "id": "potionMP",   "name": "MP물약",   "width": 1, "height": 1, "equipPart": "None",
+      "description": "MP를 회복 시켜주는 물약."  
+    }
+    
   ]
 }

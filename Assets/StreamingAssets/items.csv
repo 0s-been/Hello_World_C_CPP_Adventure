@@ -1,7 +1,15 @@
-id,name,width,height,equipPart
-sword,검,1,3,Weapon
-shield,방패,2,2,Top
-potion,물약,1,1,None
-helmet,투구,2,2,Head
-boots,장화,2,2,Shoes
-bow,활,1,3,Weapon
+id,name,width,height,equipPart,description
+Normalhat,일반투구,2,2,Hat,초보자에게 적합한 기본적인 투구.
+Normalchest,일반상의,2,3,Chest,초보자에게 적합한 기본적인 상의.
+Normallegs,일반하의,2,3,Legs,초보자에게 적합한 기본적인 하의.
+Normalshoes,일반장화,2,2,Shoes,초보자에게 적합한 기본적인 장화.
+Normalsword,일반검,1,3,Weapon,초보자에게 적합한 기본적인 검.
+Enhancedhat,강화투구,2,2,Hat,숙련된 모험가에게 적합한 고품질의 투구.
+Enhancedchest,강화상의,2,3,Chest,숙련된 모험가에게 적합한 고품질의 상의.
+Enhancedlegs,강화하의,2,3,Legs,숙련된 모험가에게 적합한 고품질의 하의.
+Enhancedshoes,강화장화,2,2,Shoes,숙련된 모험가에게 적합한 고품질의 신발.
+Enhancedsword,강화검,1,3,Weapon,숙련된 모험가에게 적합한 고품질의 검.
+potionHP,HP물약,1,1,None,HP를 회복 시켜주는 물약.
+potionMP,MP물약,1,1,None,MP를 회복 시켜주는 물약.
+
+

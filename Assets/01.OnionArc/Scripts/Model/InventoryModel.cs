@@ -5,7 +5,9 @@ using InventorySDK.Application;
 
 namespace OnionArc.Model
 {
-
+    /// <summary>
+    /// IInventoryModel의 구현체 model
+    /// </summary>
     public class InventoryModel : IInventoryModel
     {
         private readonly IInventoryApplication _application;
@@ -15,7 +17,6 @@ namespace OnionArc.Model
             _application = application;
         }
 
-
         // application으로 위임
         public int Rows => _application.Rows;
         public int Cols => _application.Cols;
@@ -23,7 +24,7 @@ namespace OnionArc.Model
 
 
         // domain에서 출발한 변경 통지 스트림을 app으로 위임해서 위로 노출
-        // presenter가 이걸 구독해서 view를 갱신.
+        // presenter가 이걸 구독해서 view를 갱신
         public IObservable<IReadOnlyList<PlacedItem>> OnInventoryChanged
             => _application.OnInventoryChanged;
 
@@ -35,5 +36,8 @@ namespace OnionArc.Model
 
         public PlacedItem GetItemAt(int row, int col)
             => _application.GetItemAt(row, col);
+
+        public bool TryMove(int frow, int fcol, int trow, int tcol)
+            => _application.TryMove(frow, fcol, trow, tcol);
     }
 }

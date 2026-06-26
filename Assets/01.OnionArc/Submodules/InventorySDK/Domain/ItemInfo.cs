@@ -9,18 +9,21 @@ namespace InventorySDK.Domain
         public string Name { get; }
         public int Width { get; }
         public int Height { get; }
-        /// <summary>
-        /// 장착 부위 (없으면 None)
-        /// </summary>
-        public EquipPart EquipPart { get; }  
+        /// <summary> 장착 부위 </summary>
+        public EquipPart EquipPart { get; }
 
-        public ItemInfo(string id, string name, int width, int height, EquipPart equipPart = EquipPart.None)
+        /// <summary> 아이템 설명 툴팁 </summary>
+        public string Description { get; }
+
+        public ItemInfo(string id, string name, int width, int height,
+                        EquipPart equipPart = EquipPart.None, string description = "")
         {
             Id = id;
             Name = name;
             Width = width;
             Height = height;
             EquipPart = equipPart;
+            Description = description;
         }
     }
 }

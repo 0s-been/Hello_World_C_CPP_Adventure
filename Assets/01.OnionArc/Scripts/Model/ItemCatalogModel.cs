@@ -8,9 +8,9 @@ namespace OnionArc.Model
 {
 
     /// <summary>
-    /// 아이템 카탈로그 model. 
-    /// application을 통해 데이터를 로드해 메모리에 보관.
-    /// 로드 완료를 IObservable로 통지.
+    /// 아이템 카탈로그 model
+    /// application을 통해 데이터를 로드해 메모리에 보관
+    /// 로드 완료를 IObservable로 통지
     /// </summary>
     public class ItemCatalogModel : IItemCatalogModel
     {
@@ -28,9 +28,7 @@ namespace OnionArc.Model
         public IReadOnlyList<ItemInfo> Items => _items;
         public IObservable<IReadOnlyList<ItemInfo>> OnLoaded => _onLoaded;
 
-        /// <summary>
-        /// Application이 돌려주는 스트림을 구독하고 도착하면 보관 후 통지
-        /// </summary>
+        /// <summary> Application이 돌려주는 스트림을 구독하고 도착하면 보관 후 통지 </summary>
         public void Load()
         {
             _application.LoadItems()

@@ -5,10 +5,11 @@ namespace InventorySDK.Domain
     /// </summary>
     public enum EquipPart
     {
-        None = 0,   // 장착 불가 (소비 아이템 등)
-        Head,
-        Top,
-        Bottom,
+        /// <summary> 소비 아이템등 장착 불가능한 경우 </summary>
+        None = 0,
+        Hat,
+        Chest,
+        Legs,
         Shoes,
         Weapon,
     }

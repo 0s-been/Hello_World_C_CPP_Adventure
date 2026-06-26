@@ -9,13 +9,7 @@ namespace InventorySDK.Infrastructure
 {
 
     /// <summary>
-    /// IItemRepositoryDomain의 JSON 구현체 (구현체 2).
-    /// JSON 형식:
-    ///   { "items": [ { "id":"sword","name":"검","width":1,"height":3,"equipPart":"Weapon" }, }
-    ///
-    /// JsonUtility의 두 가지 제약을 우회한다:
-    ///   1) 최상위 배열을 직접 못 읽음 → { "items": [...] } 래퍼로 감싼다.
-    ///   2) enum을 직접 매핑하지만 안전하게 string으로 받아 Enum.TryParse로 변환한다.
+    /// IItemRepositoryDomain의 json 구현체 
     /// </summary>
     public class JsonItemRepository : IItemRepositoryDomain
     {
@@ -37,7 +31,6 @@ namespace InventorySDK.Infrastructure
             string path = Path.Combine(UnityEngine.Application.streamingAssetsPath, _fileName);
             if (!File.Exists(path))
             {
-                //Debug.LogWarning($"[JsonItemRepository] 파일 없음: {path} → 빈 목록 반환");
                 return string.Empty;
             }
             return File.ReadAllText(path);
@@ -55,7 +48,6 @@ namespace InventorySDK.Infrastructure
             }
             catch (Exception e)
             {
-                //Debug.LogWarning($"[JsonItemRepository] 파싱 실패: {e.Message} → 빈 목록 반환");
                 return result;
             }
 
@@ -66,7 +58,9 @@ namespace InventorySDK.Infrastructure
                 int width  = dto.width  > 0 ? dto.width  : 1;
                 int height = dto.height > 0 ? dto.height : 1;
                 EquipPart part = Enum.TryParse(dto.equipPart, out EquipPart p) ? p : EquipPart.None;
-                result.Add(new ItemInfo(dto.id, dto.name, width, height, part));
+                // description은 없으면 null이 올 수 있어 빈 문자열로 보정
+                string description = dto.description ?? "";
+                result.Add(new ItemInfo(dto.id, dto.name, width, height, part, description));
             }
             return result;
         }
@@ -86,6 +80,7 @@ namespace InventorySDK.Infrastructure
             public int width;
             public int height;
             public string equipPart;
+            public string description;
         }
 
         [Serializable]
