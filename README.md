@@ -1,6 +1,4 @@
-# Hello_World_C_CPP_Adventure
-It's a final project of sophomore in second semester.
-
+MVP패턴과 어니언 아키텍처를 적용하여 인벤토리, 장착 시스템을 구현한 간단한 학습 프로젝트입니다.
 기말과제 작업 위치
 Assets/01.OnionArc의 전체 소스 코드
 
